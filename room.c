@@ -1,11 +1,15 @@
 #include <stdlib.h>
-#include <stdin.h>
+#include <stdio.h>
 //using post to interface, copy paste code from the lecture notes
-char string[200];
-char c;
-int a = 0;
-int n = atoi(getenv(“CONTENT_LENGTH”));
-fgets(string,n,stdin);
+int main(){
+	char *data;
+	long m,n;
+	printf("%s%c%c\n",
+	"Content-Type:text/html;charset=iso-8859-1",13,10);
+	data = getenv("QUERY_STRING");
+	printf("<html>");
+	printf("%s",data);
+	printf("<html>");
 
-printf(“Content-Type:text/html\n\n”);
-printf("<p>%s</p>",string);
+	return 0;
+}
