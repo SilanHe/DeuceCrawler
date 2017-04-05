@@ -39,6 +39,7 @@ int writeFile(char *contents, char* fileName){
 
 //using post to interface, copy paste code from the lecture notes
 int main(){
+	char * file = "resources.csv\0";
 	int rMana,rGold,rOccupied,pMana,pGold;
 	char *data;
 	char *token;
@@ -48,17 +49,17 @@ int main(){
 	data = getenv("QUERY_STRING");
 
 	while(data){
-		token=strtok(data,”+”);
-		if (strcmp(token,”PLAY”)==0){
+		token=strtok(data,"+");
+		if (strcmp(token,"PLAY")==0){
 			command=0;
 			break;
-		}else if (strcmp(token,”DROP”)==0){
+		}else if (strcmp(token,"DROP")==0){
 			command=1;
 			break;
-		}else if (strcmp(token,”EXIT”)==0){
+		}else if (strcmp(token,"EXIT")==0){
 			command=2;
 			break;
-		}else if (strcmp(token,”REFRESH”)==0){
+		}else if (strcmp(token,"REFRESH")==0){
 			command=3;
 			break;
 		}else{
@@ -74,12 +75,12 @@ int main(){
 		//declare variables
 		char * gold,write;
 
-		token = strtok(data,”+”);
+		token = strtok(data,"+");
 		int n = atoi(token); //number of gold sacrificed
 
 
 		//get the resources.csv info
-		token = readFile(resources.csv);
+		token = readFile(file);
 		char* mana = strtok(token,",");
 		rGold = atoi(strtok(token,","));
 
@@ -89,80 +90,80 @@ int main(){
 		}
 
 		//player inventory
-		pMana = strtok(data,",");
-		pGold = strtok(data,",");
+		pMana = atoi(strtok(data,","));
+		pGold = atoi(strtok(data,","));
 
 		//update resources.csv
 		rGold = rGold+n;
-		
 		sprintf(gold,"%d",rGold);
-		write = mana+","+gold+","+"1\0";
-		writeFile(write,resources.csv);
+		write = *strcat(strcat(mana,","),strcat(gold,",1"));
+		writeFile(&write,file);
 
 		//update the page with new mana for the player, updated screen
 		pGold=pGold-n;
 		pMana=pMana+n/2;
+
 		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
 		printf("<!DOCTYPE html>
-<html>
-<title>DeuceVille</title>
-<body style=\"text-align: center;\">
+			<html>
+			<title>DeuceVille</title>
+			<body style=\"text-align: center;\">
 
-<h1>Welcome to DeuceVille</h1>
-<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">
-</center>
-<h3>Your command is not recognized at DeuceVille</h3>
-<form action=\"room.c\" method=\"post\">
-    <input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>
-    <input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px
-      ;height:20px;\" type=\"submit\" value=\"Submit\">
-      <input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">
-</form>
-<center>
-	<table>
-		<tr>
-			<th></th>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"North\" />
-				</form>
-			</th>
-			<th></th>
-		</tr>
-		<tr>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"West\" />
-				</form>
-			</th>
-			<th></th>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"East\" />
-				</form>
-			</th>
-		</tr>
-		<tr>
-			<th></th>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"South\" />
-				</form>
-			</th>
-			<th></th>
-		</tr>
-	</table>
-</center>
+			<h1>Welcome to DeuceVille</h1>
+			<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">
+			</center>
+			<h3>Your command is not recognized at DeuceVille</h3>
+			<form action=\"room.c\" method=\"post\">
+			    <input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>
+			    <input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px
+			      ;height:20px;\" type=\"submit\" value=\"Submit\">
+			      <input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">
+			</form>
+			<center>
+				<table>
+					<tr>
+						<th></th>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"North\" />
+							</form>
+						</th>
+						<th></th>
+					</tr>
+					<tr>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"West\" />
+							</form>
+						</th>
+						<th></th>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"East\" />
+							</form>
+						</th>
+					</tr>
+					<tr>
+						<th></th>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"South\" />
+							</form>
+						</th>
+						<th></th>
+					</tr>
+				</table>
+			</center>
 
-</body>
-</html>
-
-",pMana,pGold);
-		
+			</body>
+			</html>",pMana,pGold);
+					
 	//EXIT	
 	}else if (command==2){
+		char * gold,mana,write;
+
 		//get the resources.csv info
-		token = readFile(resources.csv);
+		token = readFile(file);
 		rMana = atoi(strtok(token,","));
 		rGold = atoi(strtok(token,","));
 
@@ -172,37 +173,35 @@ int main(){
 		}
 
 		//player inventory
-		pMana = strtok(data,",");
-		pGold = strtok(data,",");
+		pMana = atoi(strtok(data,","));
+		pGold = atoi(strtok(data,","));
 
 		//update resources.csv
 		rGold = rGold+pGold;
 		rMana = rMana+pMana;
-		char * gold,mana,write;
+		
 		sprintf(gold,"%d",rGold);
 		sprintf(mana,"%d",rGold);
-		write = mana+","+gold+","+"0\0";
-		writeFile(write,resources.csv);
+		write = *strcat(strcat(mana,","),strcat(gold,",0"));
+		writeFile(&write,file);
 
 		//display goodbye screen
 		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
 		printf("<!DOCTYPE html>
-<html>
-<title>DeuceVille</title>
-<body style=\"text-align: center;\">
+			<html>
+			<title>DeuceVille</title>
+			<body style=\"text-align: center;\">
 
-<h1>Welcome to DeuceVille</h1>
-<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">
-</center>
-<h3>Deuces, this page is now useless</h3>
-</center>
+			<h1>Welcome to DeuceVille</h1>
+			<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">
+			</center>
+			<h3>Deuces, this page is now useless</h3>
+			</center>
 
-</body>
-</html>
+			</body>
+			</html>
 
-");
-
-		
+		");	
 	//REFRESH
 	}else if (command==3){
 		//redisplay screen with resources.csv and inventory
@@ -211,66 +210,66 @@ int main(){
 		}
 
 		//player inventory
-		pMana = strtok(data,",");
-		pGold = strtok(data,",");
+		pMana = atoi(strtok(data,","));
+		pGold = atoi(strtok(data,","));
 
 		//reload the page
 		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
 		printf("<!DOCTYPE html>
-<html>
-<title>DeuceVille</title>
-<body style=\"text-align: center;\">
+			<html>
+			<title>DeuceVille</title>
+			<body style=\"text-align: center;\">
 
-<h1>Welcome to DeuceVille</h1>
-<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">
-</center>
-<h3>DeuceVille is refreshed!</h3>
-<form action=\"room.c\" method=\"post\">
-    <input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>
-    <input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px
-      ;height:20px;\" type=\"submit\" value=\"Submit\">
-      <input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">
-</form>
-<center>
-	<table>
-		<tr>
-			<th></th>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"North\" />
-				</form>
-			</th>
-			<th></th>
-		</tr>
-		<tr>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"West\" />
-				</form>
-			</th>
-			<th></th>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"East\" />
-				</form>
-			</th>
-		</tr>
-		<tr>
-			<th></th>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"South\" />
-				</form>
-			</th>
-			<th></th>
-		</tr>
-	</table>
-</center>
+			<h1>Welcome to DeuceVille</h1>
+			<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">
+			</center>
+			<h3>DeuceVille is refreshed!</h3>
+			<form action=\"room.c\" method=\"post\">
+			    <input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>
+			    <input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px
+			      ;height:20px;\" type=\"submit\" value=\"Submit\">
+			      <input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">
+			</form>
+			<center>
+				<table>
+					<tr>
+						<th></th>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"North\" />
+							</form>
+						</th>
+						<th></th>
+					</tr>
+					<tr>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"West\" />
+							</form>
+						</th>
+						<th></th>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"East\" />
+							</form>
+						</th>
+					</tr>
+					<tr>
+						<th></th>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"South\" />
+							</form>
+						</th>
+						<th></th>
+					</tr>
+				</table>
+			</center>
 
-</body>
-</html>
+			</body>
+			</html>
 
-",pMana,pGold);
+		",pMana,pGold);
 		
 	//OTHER
 	}else{
@@ -280,70 +279,68 @@ int main(){
 		}
 
 		//player inventory
-		pMana = strtok(data,",");
-		pGold = strtok(data,",");
+		pMana = atoi(strtok(data,","));
+		pGold = atoi(strtok(data,","));
 
 		//display confusion screen, not recognized command
 		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
 		printf("<!DOCTYPE html>
-<html>
-<title>DeuceVille</title>
-<body style=\"text-align: center;\">
+			<html>
+			<title>DeuceVille</title>
+			<body style=\"text-align: center;\">
 
-<h1>Welcome to DeuceVille</h1>
-<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">
-</center>
-<h3>Your command is not recognized at DeuceVille</h3>
-<form action=\"room.c\" method=\"post\">
-    <input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>
-    <input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px
-      ;height:20px;\" type=\"submit\" value=\"Submit\">
-      <input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">
-</form>
-<center>
-	<table>
-		<tr>
-			<th></th>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"North\" />
-				</form>
-			</th>
-			<th></th>
-		</tr>
-		<tr>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"West\" />
-				</form>
-			</th>
-			<th></th>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"East\" />
-				</form>
-			</th>
-		</tr>
-		<tr>
-			<th></th>
-			<th>
-				<form action=\"http://google.com\">
-					<input type=\"submit\" value=\"South\" />
-				</form>
-			</th>
-			<th></th>
-		</tr>
-	</table>
-</center>
+			<h1>Welcome to DeuceVille</h1>
+			<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">
+			</center>
+			<h3>Your command is not recognized at DeuceVille</h3>
+			<form action=\"room.c\" method=\"post\">
+			    <input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>
+			    <input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px
+			      ;height:20px;\" type=\"submit\" value=\"Submit\">
+			      <input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">
+			</form>
+			<center>
+				<table>
+					<tr>
+						<th></th>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"North\" />
+							</form>
+						</th>
+						<th></th>
+					</tr>
+					<tr>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"West\" />
+							</form>
+						</th>
+						<th></th>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"East\" />
+							</form>
+						</th>
+					</tr>
+					<tr>
+						<th></th>
+						<th>
+							<form action=\"http://google.com\">
+								<input type=\"submit\" value=\"South\" />
+							</form>
+						</th>
+						<th></th>
+					</tr>
+				</table>
+			</center>
 
-</body>
-</html>
-
-",pMana,pGold);
-
+			</body>
+		</html>",pMana,pGold);
 	}
 	
 	
 
 	return 0;
+}
 }
