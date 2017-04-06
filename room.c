@@ -46,8 +46,8 @@ int main(void){
 	char *token;
 	char S[6]="+=, ;";
 
-	//data = getenv("QUERY_STRING");
-	char data[100]="EXIT inventory 10 10";
+	char data[100] = getenv("QUERY_STRING");
+	//char data[100]="EXIT inventory 10 10";
 	printf("%s",data);
 	token=strtok(data,S);
 	printf("%s",token);
@@ -140,7 +140,7 @@ int main(void){
 			"<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">"
 			"</center>"
 			"<h3>DROP succesful</h3>"
-			"<form action=\"room.c\" method=\"post\">"
+			"<form action=\"room.cgi\" method=\"post\">"
 			    "<input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>"
 			    "<input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px; height:20px;\" type=\"submit\" value=\"Submit\">"
 			    "<input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">"
@@ -275,7 +275,7 @@ int main(void){
 			"<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">"
 			"</center>"
 			"<h3>DeuceVille is refreshed.</h3>"
-			"<form action=\"room.c\" method=\"post\">"
+			"<form action=\"room.cgi\" method=\"post\">"
 			    "<input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>"
 			    "<input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px; height:20px;\" type=\"submit\" value=\"Submit\">"
 			    "<input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">"
@@ -332,7 +332,7 @@ int main(void){
 			"<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">"
 			"</center>"
 			"<h3>Your command is not recognized at DeuceVille</h3>"
-			"<form action=\"room.c\" method=\"post\">"
+			"<form action=\"room.cgi\" method=\"post\">"
 			    "<input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>"
 			    "<input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px; height:20px;\" type=\"submit\" value=\"Submit\">"
 			    "<input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">"
