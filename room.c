@@ -46,7 +46,7 @@ int main(void){
 	char *token;
 	char S[6]="+=, ;";
 
-	char data[100] = getenv("QUERY_STRING");
+	char *data = getenv("QUERY_STRING");
 	//char data[100]="EXIT inventory 10 10";
 	printf("%s",data);
 	token=strtok(data,S);
