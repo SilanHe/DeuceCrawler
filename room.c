@@ -84,7 +84,7 @@ int main(void){
 
 	    //gamepage
 
-	    printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
+	    printf("Content-type:text/html\n\n");
 		printf("<!DOCTYPE html>"
 			"<html>"
 			"<title>DeuceVille</title>"
@@ -130,7 +130,7 @@ int main(void){
 		pGold=pGold-n;
 		pMana=pMana+n/2;
 
-		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
+		printf("Content-type:text/html\n\n");
 		printf("<!DOCTYPE html>"
 			"<html>"
 			"<title>DeuceVille</title>"
@@ -208,7 +208,7 @@ int main(void){
 		writeFile(mana,file);
 
 		//display goodbye screen
-		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
+		printf("Content-type:text/html\n\n");
 		printf("<!DOCTYPE html>"
 			"<html>"
 			"<title>DeuceVille</title>"
@@ -265,7 +265,7 @@ int main(void){
 	}else if (strcmp(token,"REFRESH")==0){
 
 		//reload the page
-		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
+		printf("Content-type:text/html\n\n");
 		printf("<!DOCTYPE html>"
 			"<html>"
 			"<title>DeuceVille</title>"
@@ -322,7 +322,7 @@ int main(void){
 	}else{
 
 		//display confusion screen, not recognized command
-		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
+		printf("Content-type:text/html\n\n");
 		printf("<!DOCTYPE html>"
 			"<html>"
 			"<title>DeuceVille</title>"
