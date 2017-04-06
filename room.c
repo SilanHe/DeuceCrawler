@@ -47,14 +47,9 @@ int main(){
 	char *data;
 	char *token;
 	int command;
-	long m,n;
 
 	data = getenv("QUERY_STRING");
-	printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
-	printf("<html>");
-	printf("%s",data);
-	printf("</html>");
-
+	
 	while(data){
 		token=strtok(data,"+");
 		if (strcmp(token,"PLAY")==0){
@@ -76,16 +71,53 @@ int main(){
 	//PLAY
 	if (command==0){
 		//activate the game file
-		
+
+		/*
 		pid_t pid=fork();
-		if (pid==0){
-			execv("")
+	    if (pid==0) { // child process
+	        static char *argv[]={"echo","Foo is my name.",NULL};
+	        execv("game.cgi",argv);
+	        exit(127); // only if execv fails
+	    }
+	    else { //pid!=0; parent process
+	        waitpid(pid,0,0); //wait for child to exit
+	    }
+	    */
+
+	    //read str until inventory
+		while(strcmp(token,"inventory")!=0){
+			token=strtok(data,"+");
 		}
+
+		//player inventory
+		pMana = atoi(strtok(data,","));
+		pGold = atoi(strtok(data,","));
+		
+	    //gamepage
+
+	    printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
+		printf("<!DOCTYPE html>"
+			"<html>"
+			"<title>DeuceVille</title>"
+			"<body style=\"text-align: center;\">"
+
+			"<h1>Welcome to DeuceVille</h1>"
+			"<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">"
+			"</center>"
+			"<h3>Boss Challenge</h3>"
+			"<form action=\"game.cgi\" method=\"post\">"
+			    "<input type=\"text\" name=\"command\" placeholder=\"A versatile word synonymous to 2?\" style=\"width:800px;\"></br>"
+			    "<input title=\"commands: QUIT, deuce\" style=\"width:100px; height:20px;\" type=\"submit\" value=\"Submit\">"
+			    "<input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">"
+			"</form>"
+
+			"</body>"
+			"</html>",pMana,pGold);
 		
 	//DROP	
 	}else if (command==1){
 		//declare variables
-		char * gold,write;
+		char * gold,*write;
 
 		token = strtok(data,"+");
 		int n = atoi(token); //number of gold sacrificed
@@ -108,8 +140,8 @@ int main(){
 		//update resources.csv
 		rGold = rGold+n;
 		sprintf(gold,"%d",rGold);
-		write = *strcat(strcat(mana,","),strcat(gold,",1"));
-		writeFile(&write,file);
+		write = strcat(strcat(mana,","),strcat(gold,",1"));
+		writeFile(mana,file);
 
 		//update the page with new mana for the player, updated screen
 		pGold=pGold-n;
@@ -171,7 +203,7 @@ int main(){
 					
 	//EXIT	
 	}else if (command==2){
-		char * gold,mana,write;
+		char * gold,*mana,*write;
 
 		//get the resources.csv info
 		token = readFile(file);
@@ -193,8 +225,8 @@ int main(){
 		
 		sprintf(gold,"%d",rGold);
 		sprintf(mana,"%d",rMana);
-		write = *strcat(strcat(mana,","),strcat(gold,",0"));
-		writeFile(&write,file);
+		write = strcat(strcat(mana,","),strcat(gold,",0"));
+		writeFile(mana,file);
 
 		//display goodbye screen
 		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
