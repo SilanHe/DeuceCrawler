@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h> /* for fork */
+#include <sys/types.h> /* for pid_t */
+#include <sys/wait.h> /* for wait */
 
 char *readFile(char *fileName){
 	//read the file into a string
@@ -47,6 +50,10 @@ int main(){
 	long m,n;
 
 	data = getenv("QUERY_STRING");
+	printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
+	printf("<html>");
+	printf("%s",data);
+	printf("</htlm>");
 
 	while(data){
 		token=strtok(data,"+");
@@ -69,6 +76,11 @@ int main(){
 	//PLAY
 	if (command==0){
 		//activate the game file
+		
+		pid_t pid=fork();
+		if (pid==0){
+			execv("")
+		}
 		
 	//DROP	
 	}else if (command==1){
