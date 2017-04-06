@@ -1,14 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h> /* for fork */
-#include <sys/types.h> /* for pid_t */
-#include <sys/wait.h> /* for wait */
+#include <unistd.h> / for fork /
+#include <sys/types.h> / for pid_t /
+#include <sys/wait.h> / for wait /
 
-char *readFile(char *fileName){
+char readFile(char fileName){
 	//read the file into a string
-    FILE *file = fopen(fileName, "r");
-    char *content;
+    FILE file = fopen(fileName, "r");
+    char content;
     size_t n = 0;
     int c;//counter
 
@@ -28,9 +28,9 @@ char *readFile(char *fileName){
 
     return content;
 }
-int writeFile(char *contents, char* fileName){
+int writeFile(char contents, char fileName){
 	//write the string into the file
-    FILE *file = fopen(fileName, "w+");
+    FILE file = fopen(fileName, "w+");
 
     if (file == NULL)
         return 0; //could not open file
@@ -39,48 +39,60 @@ int writeFile(char *contents, char* fileName){
 
     return 1;
 }
-int main(void){
-	char *file = "resources.csv\0";
+
+//using post to interface, copy paste code from the lecture notes
+int main(int argc,char argv[]){
+	char  file = "resources.csv\0";
 	int rMana,rGold,rOccupied,pMana,pGold;
-	// *data;
-	char *token;
-	char S[6]="+=, ;";
+	char data=malloc(1000);
+	char token=malloc(100);
+	int command;
 
 	//data = getenv("QUERY_STRING");
-	char data[100]="EXIT inventory 10 10";
-	printf("%s",data);
-	token=strtok(data,S);
-	printf("%s",token);
+	data = "command=EXIT\0";
 
-	//get player inventory
-	while(strcmp(token,"inventory")!=0){
-		token=strtok(NULL,S);
-		printf("%s",token);
+	while(data){
+		token=strtok(data,"=+,");
+		if (strcmp(token,"PLAY")==0){
+			command=0;
+			break;
+		}else if (strcmp(token,"DROP")==0){
+			command=1;
+			break;
+		}else if (strcmp(token,"EXIT")==0){
+			command=2;
+			break;
+		}else if (strcmp(token,"REFRESH")==0){
+			command=3;
+			break;
+		}else{
+			command=4;
+		}
 	}
-
-	//player inventory
-	token=strtok(NULL,S);
-	printf("%s",token);
-	pMana = atoi(token);
-	token=strtok(NULL,S);
-	printf("%s",token);
-	pGold = atoi(token);
-
 	//PLAY
-	if (strcmp(token,"PLAY")==0){
+	if (command==0){
 		//activate the game file
 
-		/*
+		/
 		pid_t pid=fork();
 	    if (pid==0) { // child process
-	        static char *argv[]={"echo","Foo is my name.",NULL};
+	        static char argv[]={"echo","Foo is my name.",NULL};
 	        execv("game.cgi",argv);
 	        exit(127); // only if execv fails
 	    }
 	    else { //pid!=0; parent process
 	        waitpid(pid,0,0); //wait for child to exit
 	    }
-	    */
+	    /
+
+	    //read str until inventory
+		while(strcmp(token,"inventory")!=0){
+			token=strtok(data,"+=,");
+		}
+
+		//player inventory
+		pMana = atoi(strtok(data,",+="));
+		pGold = atoi(strtok(data,",+="));
 
 	    //gamepage
 
@@ -104,26 +116,33 @@ int main(void){
 			"</html>",pMana,pGold);
 		
 	//DROP	
-	}else if (strcmp(token,"DROP")==0){
+	}else if (command==1){
 		//declare variables
-		char *mana=malloc(100);
-		char *gold=malloc(100);
-		char *write=malloc(100);
+		char  gold;
+		char write=malloc(100);
 
-		token=strtok(NULL,S);
+		token = strtok(data,"+=,");
 		int n = atoi(token); //number of gold sacrificed
 
+
 		//get the resources.csv info
-		char *csv = readFile(file);
-		token = strtok(csv,S);
-		rMana = atoi(token);
-		token = strtok(NULL,S);
-		rGold = atoi(token);
+		token = readFile(file);
+		char mana = strtok(token,"+=,");
+		rGold = atoi(strtok(token,"+=,"));
+
+		//read str until inventory
+		while(strcmp(token,"inventory")!=0){
+			token=strtok(data,"+,=");
+		}
+
+		//player inventory
+		pMana = atoi(strtok(data,"+=,"));
+		pGold = atoi(strtok(data,"+=,"));
 
 		//update resources.csv
 		rGold = rGold+n;
 		sprintf(gold,"%d",rGold);
-		write = strcat(strcat(mana,","),strcat(gold,",1"));
+		write = strcat(strcat(mana,","),strcat(gold,",1\0"));
 		writeFile(mana,file);
 
 		//update the page with new mana for the player, updated screen
@@ -185,18 +204,24 @@ int main(void){
 			"</html>",pMana,pGold);
 					
 	//EXIT	
-	}else if (strcmp(token,"EXIT")==0){
-		char *gold=malloc(100);
-		char *mana=malloc(100);
-		char *write=malloc(1000);
-
+	}else if (command==2){
+		char gold=malloc(100);
+		char mana=malloc(100);
+		char write=malloc(100);
 
 		//get the resources.csv info
-		char *csv = readFile(file);
-		token = strtok(csv,S);
-		rMana = atoi(token);
-		token = strtok(NULL,S);
-		rGold = atoi(token);
+		token = readFile(file);
+		rMana = atoi(strtok(token,"+=,"));
+		rGold = atoi(strtok(token,"+=,"));
+
+		//read str until inventory
+		while(strcmp(token,"inventory")!=0){
+			token=strtok(data,"+,=");
+		}
+
+		//player inventory
+		pMana = atoi(strtok(data,"+=,"));
+		pGold = atoi(strtok(data,"+=,"));
 
 		//update resources.csv
 		rGold = rGold+pGold;
@@ -204,7 +229,7 @@ int main(void){
 		
 		sprintf(gold,"%d",rGold);
 		sprintf(mana,"%d",rMana);
-		write = strcat(strcat(mana,","),strcat(gold,",0"));
+		write = strcat(strcat(mana,","),strcat(gold,",0\0"));
 		writeFile(mana,file);
 
 		//display goodbye screen
@@ -262,7 +287,15 @@ int main(void){
 			"</body>"
 			"</html>",pMana,pGold);
 	//REFRESH
-	}else if (strcmp(token,"REFRESH")==0){
+	}else if (command==3){
+		//redisplay screen with resources.csv and inventory
+		while(strcmp(token,"inventory")!=0){
+			token=strtok(data,"+,=");
+		}
+
+		//player inventory
+		pMana = atoi(strtok(data,"+=,"));
+		pGold = atoi(strtok(data,"+=,"));
 
 		//reload the page
 		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
@@ -320,6 +353,14 @@ int main(void){
 			"</html>",pMana,pGold);
 	//OTHER
 	}else{
+		//redisplay screen with resources.csv and inventory
+		while(strcmp(token,"inventory")!=0){
+			token=strtok(data,"=,+");
+		}
+
+		//player inventory
+		pMana = atoi(strtok(data,"+=,"));
+		pGold = atoi(strtok(data,"+=,"));
 
 		//display confusion screen, not recognized command
 		printf("%s%c%c\n","Content-Type:text/html;charset=iso-8859-1",13,10);
