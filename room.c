@@ -117,7 +117,7 @@ int main(void){
 			"</html>",pMana,pGold);
 		
 	//DROP	
-	}else if (command=1){
+	}else if (command==1){
 		//declare variables
 		char *mana=malloc(100);
 		char *gold=malloc(100);
@@ -198,7 +198,7 @@ int main(void){
 			"</html>",pMana,pGold);
 					
 	//EXIT	
-	}else if (command=2){
+	}else if (command==2){
 		char *gold=malloc(100);
 		char *mana=malloc(100);
 		char *write=malloc(1000);
