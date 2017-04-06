@@ -4,28 +4,38 @@
 
 int main(int argc, char [] *argv){
 
-	char * file = "resources.csv\0";
+	char *file = "resources.csv\0";
 	int rMana,rGold,rOccupied,pMana,pGold;
-	char *data;
+	// *data;
 	char *token;
+	char S[6]="+=, ;";
 	int command;
-
-	data = getenv("QUERY_STRING");
-
-	while(data){
-		token=strtok(data,"+");
-		if (strcmp(token,"deuce")==0){
-			command=0;
-			break;
-		}else if (strcmp(token,"QUIT")==0){
-			command=1;
-			break;
-		}else if (strcmp(token,"QUIT")==0){
-			command=2;
-		}else{
-
-		}
+	char *data = getenv("QUERY_STRING");
+	//char data[100]="EXIT inventory 10 10";
+	printf("%s",data);
+	token=strtok(data,S);
+	printf("%s",token);
+	if (strcmp(token,"deuce")==0){
+		command=0;
+	}else if (strcmp(token,"QUIT")==0){
+		command=1;
+	}else if (strcmp(token,"EXIT")==0){
+		command=2;
 	}
+	//get player inventory
+	while(strcmp(token,"inventory")!=0){
+		token=strtok(NULL,S);
+		printf("%s",token);
+	}
+
+	//player inventory
+	token=strtok(NULL,S);
+	printf("%s",token);
+	pMana = atoi(token);
+	token=strtok(NULL,S);
+	printf("%s",token);
+	pGold = atoi(token);
+
 	//deuce
 	if (command==0){
 		//read str until inventory

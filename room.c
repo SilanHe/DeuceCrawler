@@ -44,6 +44,7 @@ int main(void){
 	int rMana,rGold,rOccupied,pMana,pGold;
 	// *data;
 	char *token;
+	int command;
 	char S[6]="+=, ;";
 
 	char *data = getenv("QUERY_STRING");
@@ -51,6 +52,18 @@ int main(void){
 	printf("%s",data);
 	token=strtok(data,S);
 	printf("%s",token);
+
+	if (strcmp(token,"PLAY")==0){
+		command=0;
+	}else if (strcmp(token,"DROP")==0){
+		command=1;
+	}else if (strcmp(token,"EXIT")==0){
+		command=2;
+	}else if (strcmp(token,"REFRESH")==0){
+		command=3;
+	}else{
+		command=4;
+	}
 
 	//get player inventory
 	while(strcmp(token,"inventory")!=0){
@@ -67,7 +80,7 @@ int main(void){
 	pGold = atoi(token);
 
 	//PLAY
-	if (strcmp(token,"PLAY")==0){
+	if (command==0){
 		//activate the game file
 
 		/*
@@ -104,7 +117,7 @@ int main(void){
 			"</html>",pMana,pGold);
 		
 	//DROP	
-	}else if (strcmp(token,"DROP")==0){
+	}else if (command=1){
 		//declare variables
 		char *mana=malloc(100);
 		char *gold=malloc(100);
@@ -185,7 +198,7 @@ int main(void){
 			"</html>",pMana,pGold);
 					
 	//EXIT	
-	}else if (strcmp(token,"EXIT")==0){
+	}else if (command=2){
 		char *gold=malloc(100);
 		char *mana=malloc(100);
 		char *write=malloc(1000);
@@ -262,7 +275,7 @@ int main(void){
 			"</body>"
 			"</html>",pMana,pGold);
 	//REFRESH
-	}else if (strcmp(token,"REFRESH")==0){
+	}else if (command==3){
 
 		//reload the page
 		printf("Content-type:text/html\n\n");
