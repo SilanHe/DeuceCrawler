@@ -53,6 +53,13 @@ int main(void){
 	token=strtok(data,S);
 	printf("%s",token);
 
+	//check which command
+
+	while(strcmp(token,"commands")!=0){
+		token=strtok(NULL,S);
+	}
+
+	token=strtok(NULL,S);
 	if (strcmp(token,"PLAY")==0){
 		command=0;
 	}else if (strcmp(token,"DROP")==0){
