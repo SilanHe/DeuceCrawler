@@ -41,7 +41,7 @@ int writeFile(char *contents, char* fileName){
 }
 int main(void){
 	char *file = "resources.csv\0";
-	int rMana,rGold,rOccupied,pMana,pGold;
+	int rMana,rGold,rOccupied,pMana,pGold,n;
 	// *data;
 	char *token;
 	int command;
@@ -64,6 +64,8 @@ int main(void){
 		command=0;
 	}else if (strcmp(token,"DROP")==0){
 		command=1;
+		token=strtok(NULL,S);
+		n = atoi(token); //number of gold sacrificed
 	}else if (strcmp(token,"EXIT")==0){
 		command=2;
 	}else if (strcmp(token,"REFRESH")==0){
@@ -130,8 +132,6 @@ int main(void){
 		char *gold=malloc(100);
 		char *write=malloc(100);
 
-		token=strtok(NULL,S);
-		int n = atoi(token); //number of gold sacrificed
 
 		//get the resources.csv info
 		char *csv = readFile(file);
