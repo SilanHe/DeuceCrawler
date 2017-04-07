@@ -47,8 +47,8 @@ int main(void){
 	int command;
 	char S[6]="+=, ;";
 
-	char *data = getenv("QUERY_STRING");
-	//char data[100]="EXIT inventory 10 10";
+	//char *data = getenv("QUERY_STRING");
+	char data[100]="commands=EXIT inventory 10 10";
 	printf("%s",data);
 	token=strtok(data,S);
 	printf("%s",token);
@@ -87,6 +87,7 @@ int main(void){
 	token=strtok(NULL,S);
 	printf("%s",token);
 	pGold = atoi(token);
+
 
 	//PLAY
 	if (command==0){
@@ -140,7 +141,8 @@ int main(void){
 		token = strtok(NULL,S);
 		rGold = atoi(token);
 
-		//update resources.csv
+		if (pGold>=n){
+			//update resources.csv
 		rGold = rGold+n;
 		sprintf(gold,"%d",rGold);
 		write = strcat(strcat(mana,","),strcat(gold,",1"));
@@ -203,6 +205,63 @@ int main(void){
 
 			"</body>"
 			"</html>",pMana,pGold);
+	}else{
+		//reload the page
+		printf("Content-type:text/html\n\n");
+		printf("<!DOCTYPE html>"
+			"<html>"
+			"<title>DeuceVille</title>"
+			"<body style=\"text-align: center;\">"
+
+			"<h1>Welcome to DeuceVille</h1>"
+			"<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">"
+			"</center>"
+			"<h3>You do not have enough gold.</h3>"
+			"<form action=\"room.cgi\" method=\"post\">"
+			    "<input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>"
+			    "<input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px; height:20px;\" type=\"submit\" value=\"Submit\">"
+			    "<input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">"
+			"</form>"
+			"<center>"
+				"<table>"
+					"<tr>"
+						"<th></th>"
+						"<th>"
+							"<form action=\"http://google.com\">"
+								"<input type=\"submit\" value=\"North\" />"
+							"</form>"
+						"</th>"
+						"<th></th>"
+					"</tr>"
+					"<tr>"
+						"<th>"
+							"<form action=\"http://google.com\">"
+								"<input type=\"submit\" value=\"West\" />"
+							"</form>"
+						"</th>"
+						"<th></th>"
+						"<th>"
+							"<form action=\"http://google.com\">"
+								"<input type=\"submit\" value=\"East\" />"
+							"</form>"
+						"</th>"
+					"</tr>"
+					"<tr>"
+						"<th></th>"
+						"<th>"
+							"<form action=\"http://google.com\">"
+								"<input type=\"submit\" value=\"South\" />"
+							"</form>"
+						"</th>"
+						"<th></th>"
+					"</tr>"
+				"</table>"
+			"</center>"
+
+			"</body>"
+			"</html>",pMana,pGold);
+	}
+		
 					
 	//EXIT	
 	}else if (command==2){
