@@ -44,18 +44,19 @@ int main(void){
 	int rMana,rGold,rOccupied,pMana,pGold,n;
 	// *data;
 	char *token;
+	char *rnd=malloc(100);
 	int command;
-	char S[6]="+=, ;";
+	char S[8]="+=, ;&%";
 
-	//char *data = getenv("QUERY_STRING");
-	char data[100]="commands=EXIT inventory 10 10";
+	char *data = getenv("QUERY_STRING");
+	//char data[100]="commands=EXIT inventory 10 10";
 	printf("%s",data);
 	token=strtok(data,S);
 	printf("%s",token);
 
 	//check which command
 
-	while(strcmp(token,"commands")!=0){
+	while(strcmp(token,"command")!=0){
 		token=strtok(NULL,S);
 	}
 
@@ -86,7 +87,8 @@ int main(void){
 	pMana = atoi(token);
 	token=strtok(NULL,S);
 	printf("%s",token);
-	pGold = atoi(token);
+	token += 2;
+	pGold=atoi(token);
 
 
 	//PLAY
@@ -297,49 +299,8 @@ int main(void){
 			"<center><img src=\"http://i.imgur.com/MwyPH84.jpg\" alt=\"DeuceVille\" style=\"width:800px;height:400px;\">"
 			"</center>"
 			"<h3>Deuces.</h3>"
-			"<form action=\"room.cgi\" method=\"post\">"
-			    "<input type=\"text\" name=\"command\" placeholder=\"What will you do at DeuceVille?\" style=\"width:800px;\"></br>"
-			    "<input title=\"commands: PLAY, DROP, EXIT, REFRESH\" style=\"width:100px; height:20px;\" type=\"submit\" value=\"Submit\">"
-			    "<input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">"
-			"</form>"
-			"<center>"
-				"<table>"
-					"<tr>"
-						"<th></th>"
-						"<th>"
-							"<form action=\"http://google.com\">"
-								"<input type=\"submit\" value=\"North\" />"
-							"</form>"
-						"</th>"
-						"<th></th>"
-					"</tr>"
-					"<tr>"
-						"<th>"
-							"<form action=\"http://google.com\">"
-								"<input type=\"submit\" value=\"West\" />"
-							"</form>"
-						"</th>"
-						"<th></th>"
-						"<th>"
-							"<form action=\"http://google.com\">"
-								"<input type=\"submit\" value=\"East\" />"
-							"</form>"
-						"</th>"
-					"</tr>"
-					"<tr>"
-						"<th></th>"
-						"<th>"
-							"<form action=\"http://google.com\">"
-								"<input type=\"submit\" value=\"South\" />"
-							"</form>"
-						"</th>"
-						"<th></th>"
-					"</tr>"
-				"</table>"
-			"</center>"
-
 			"</body>"
-			"</html>",pMana,pGold);
+			"</html>");
 	//REFRESH
 	}else if (command==3){
 

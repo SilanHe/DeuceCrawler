@@ -8,7 +8,7 @@ int main(int argc, char [] *argv){
 	int rMana,rGold,rOccupied,pMana,pGold;
 	// *data;
 	char *token;
-	char S[6]="+=, ;";
+	char S[8]="+=, ;&%";
 	int command,numMana;
 	char *data = getenv("QUERY_STRING");
 	//char data[100]="EXIT inventory 10 10";
@@ -17,14 +17,14 @@ int main(int argc, char [] *argv){
 	printf("%s",token);
 
 	//check which command
-	while(strcmp(token,"commands")!=0){
+	while(strcmp(token,"command")!=0){
 		token=strtok(NULL,S);
 	}
 	if (strcmp(token,"deuce")==0){
 		command=0;
 	}else if (strcmp(token,"QUIT")==0){
 		command=1;
-	}else if (strcmp(token,"Mana")==0){
+	}else if (strcmp(token,"MANA")==0){
 		command=2;
 		numMana=strtok(NULL,S);
 	}else{
@@ -42,7 +42,8 @@ int main(int argc, char [] *argv){
 	pMana = atoi(token);
 	token=strtok(NULL,S);
 	printf("%s",token);
-	pGold = atoi(token);
+	token += 2;
+	pGold=atoi(token);
 
 	//deuce
 	if (command==0){
@@ -70,7 +71,7 @@ int main(int argc, char [] *argv){
 			"</center>"
 			"<h3>We have %d mana and %d gold left.</h3>"
 			"<form action=\"game.cgi\" method=\"post\">"
-			    "<input type=\"text\" name=\"command\" placeholder=\"Number of mana\" style=\"width:800px;\"></br>"
+			    "<input type=\"text\" name=\"MANA\" placeholder=\"Number of mana\" style=\"width:800px;\"></br>"
 			    "<input title=\"Mana:\" style=\"width:100px; height:20px;\" type=\"submit\" value=\"Submit\">"
 			    "<input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">"
 			"</form>"
@@ -246,7 +247,7 @@ int main(int argc, char [] *argv){
 			"</center>"
 			"<h3>Not enough resources. We have %d mana and %d gold left.</h3>"
 			"<form action=\"game.cgi\" method=\"post\">"
-			    "<input type=\"text\" name=\"command\" placeholder=\"Number of mana\" style=\"width:800px;\"></br>"
+			    "<input type=\"text\" name=\"MANA\" placeholder=\"Number of mana\" style=\"width:800px;\"></br>"
 			    "<input title=\"Mana:\" style=\"width:100px; height:20px;\" type=\"submit\" value=\"Submit\">"
 			    "<input type=\"hidden\" name=\"inventory\" value=\"%d,%d\">"
 			"</form>"
